@@ -1,0 +1,32 @@
+### Recuperar todas las películas
+GET http://localhost:1234/movies
+
+### Recuperar todas las películas por id
+GET http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+
+### Recuperar todas las películas por género
+GET http://localhost:1234/movies?genre=Action
+
+### Añadir una película con POST
+POST http://localhost:1234/movies
+Content-Type: application/json
+
+{
+    "title": "The Lord of the Rings: The Fellowship of the Ring",
+    "year": 2001,
+    "director": "Peter Jackson",
+    "duration": 178,
+    "poster": "https://www.imdb.com/title/tt0120737/mediaviewer/rm4263152384/",
+    "genre": [
+        "Adventure", 
+        "Fantasy"
+        ]
+}
+
+### Actualizar una película con PATCH
+PATCH http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+Content-Type: application/json
+
+{
+    "year": 1986
+}
