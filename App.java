@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class App {
@@ -107,7 +109,7 @@ class Task implements Runnable{
 	private Boolean sendAnswer(String message, PrintWriter pw) {
         String answer = getAnswer(message);
         Boolean cont = true;
-        if(answer.equals("bye bye!")){
+        if(answer.equals("Bye")){
             cont = false;
         }
         pw.write(answer);
@@ -118,7 +120,7 @@ class Task implements Runnable{
     private String getAnswer(String message){
         switch(message){
             case "/quit":
-                return "bye bye!";
+                return "Bye";
             case "/wait":
                 int waitTime = new Random().nextInt(3001);
                 try {                    
@@ -127,8 +129,11 @@ class Task implements Runnable{
                     e.printStackTrace();
                 }
                 return String.valueOf(waitTime);
+            case "/time":
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                return LocalDateTime.now().format(dtf);
             default:
-                return "true";
+                return "not_recognized";
         }
     }
 }
