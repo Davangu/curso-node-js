@@ -14,7 +14,30 @@ class Client {
 	
     public void main(String[] args) {
     	this.host = "localhost";
-    	this.port = "1234";
+    	this.port = 1234;
+        
+        if(connect()) {
+        	if(receive().equals("Bienvenido")) {
+                send("/time");
+                receive();
+                send("/wait");
+                receive();
+                send("/time");
+                receive();
+                send("/quit");
+                if(receive().equals("Bye"))
+                    disconnect();
+            }        	
+        }
+    }
+
+    private void disconnect() {
+        try {
+            socket.close();
+            System.out.println("CLIENT: Disconnected");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public boolean connect() {
@@ -33,7 +56,7 @@ class Client {
 	        PrintWriter pw = new PrintWriter(socket.getOutputStream());
             pw.println(message);
             pw.flush();  
-    		System.out.println("CLIENT: Message sent.");          
+    		System.out.println("CLIENT: Message sent: " + message);          
             return true;	        
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -46,7 +69,7 @@ class Client {
 			isr = new InputStreamReader(socket.getInputStream());
 	        bfr = new BufferedReader(isr);
 	        String ans = bfr.readLine();
-			System.out.println("CLIENT: Message received");
+			System.out.println("CLIENT: Message received: " + ans);
 	        return ans;
 		} catch (IOException e) {
 			e.printStackTrace();

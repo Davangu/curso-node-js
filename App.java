@@ -46,7 +46,7 @@ public class App {
 
 class Task implements Runnable{
     private Socket client = null;
-    private String motd = "Hello, client!";
+    private String motd = "Bienvenido";
 
     public Task(Socket client){
         this.client = client;
@@ -62,7 +62,7 @@ class Task implements Runnable{
         PrintWriter pw = null;
         OutputStream os = null;
 
-        System.out.println("OK: Conection stablished!");
+        System.out.println("THREAD: Conection stablished!");
 				
         // Create handlers
         try {
@@ -70,25 +70,25 @@ class Task implements Runnable{
             os = client.getOutputStream();
             isr = new InputStreamReader(is);
             bf = new BufferedReader(isr);
-            pw = new PrintWriter(os);
+            pw = new PrintWriter(os, true);
 
             // Write motd
-            pw.write(motd);
-            pw.flush();
-            System.out.println("SERVER: Message sent");
+            pw.println(motd);
+            System.out.println("THREAD: Message sent");
             
             while (cont){
                 try {
                     // Read message
-                    System.out.println("SERVER: Waiting...");
+                    System.out.println("THREAD: Waiting...");
                     String message = bf.readLine();
-                    System.out.println("SERVER: Message received");
+                    System.out.println("THREAD: Message received");
                     
                     // Send answer
                     cont = sendAnswer(message, pw);	
                 } catch (IOException e) {
-                    System.out.println("ERROR: Failed connecting to client");
+                    System.out.println("THREAD: Failed connecting to client");
                     e.printStackTrace();
+                    break;
                 }
             }
 
@@ -112,7 +112,7 @@ class Task implements Runnable{
         if(answer.equals("Bye")){
             cont = false;
         }
-        pw.write(answer);
+        pw.println(answer);
         pw.flush();
 		return cont;
 	}
@@ -128,7 +128,7 @@ class Task implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return String.valueOf(waitTime);
+                return String.valueOf(waitTime/1000.0) + "s";
             case "/time":
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 return LocalDateTime.now().format(dtf);
